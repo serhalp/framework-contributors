@@ -7,9 +7,17 @@ import {
   json,
   useLoaderData,
 } from "@remix-run/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { request } from "@octokit/request";
 
-import appStylesHref from "./app.css?url";
+import stylesheet from "~/tailwind.css?url";
 
 const FRAMEWORKS = [
   { owner: "vercel", repo: "next.js" },
@@ -72,7 +80,7 @@ const getContributorsForRepo = async ({
 };
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: appStylesHref },
+  { rel: "stylesheet", href: stylesheet },
 ];
 
 export const loader = async () => {
@@ -97,31 +105,39 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <h1>Framework Top Contributors</h1>
+        <h1 className="text-4xl font-bold">Framework Top Contributors</h1>
         {contributorsByRepo.length > 0 ? (
-          <ul>
+          <div className="items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3">
             {contributorsByRepo.map(({ owner, repo, contributors }) => (
-              <li key={`${owner}/${repo}`}>
-                <span>
-                  {owner}/{repo}
-                </span>
-                <ol>
-                  {contributors.map((contributor) => (
-                    <li key={contributor.login}>
-                      <a href={`https://github.com/${contributor.login}`}>
-                        {contributor.login}
-                      </a>{" "}
-                      {": "}
-                      <span>{contributor.contributions} contributions</span>
-                      <span>{` (${Math.round(
-                        contributor.contributorScore * 100
-                      )}%)`}</span>
-                    </li>
-                  ))}
-                </ol>
-              </li>
+              <Card key={`${owner}/${repo}`}>
+                <CardHeader>
+                  <CardTitle>
+                    {owner}/{repo}
+                  </CardTitle>
+                  <CardDescription>Card Description?</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ol>
+                    {contributors.map((contributor) => (
+                      <li key={contributor.login}>
+                        <a href={`https://github.com/${contributor.login}`}>
+                          {contributor.login}
+                        </a>{" "}
+                        {": "}
+                        <span>{contributor.contributions} contributions</span>
+                        <span>{` (${Math.round(
+                          contributor.contributorScore * 100
+                        )}%)`}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </CardContent>
+                <CardFooter>
+                  <p>Card Footer?</p>
+                </CardFooter>
+              </Card>
             ))}
-          </ul>
+          </div>
         ) : (
           <p>
             <i>No data found... Whoops!</i>
